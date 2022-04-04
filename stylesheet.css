@@ -1,0 +1,70 @@
+
+body {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+span {
+    display: inline-block;
+}
+
+#words {
+    display: inline-block;
+
+    position: relative;
+
+    color: #222;
+    font-family: 'Roboto Mono', 'Courier New', Courier, monospace;
+    font-weight: bold;
+    font-size: 20px;
+    
+    padding: 4px 8px;
+    border: 1px solid #DDD;
+    border-radius: 8px;
+}
+
+.letter.passed {
+    opacity: 0.5;
+}
+
+#words .space {
+    position: relative;
+    color: #0000;
+    margin: 0 2px;
+}
+
+#words .space::after {
+    position: absolute;
+    left: 0;
+    bottom: .2em;
+    
+    content: "";
+
+    width: calc(100% - .2em);
+    height: 1px;
+    
+    border: solid .1em #AAA;
+    border-top-width: 0;
+}
+
+.caret::after {
+    content: "";
+    
+    display: inline-block;
+
+    position: absolute;
+    top: 5%;
+    left: -1px;
+
+    width: 2px;
+    height: 90%;
+    background: #222;
+}
