@@ -56,6 +56,7 @@ function generateLesson(length_input) {
         lesson_str.push(word_bank[Math.floor(Math.random() * word_bank.length)].toLowerCase());
     }
 
+    // Populate page with said string, word by word
     for(let word = 0; word < lesson_str.length; word++) {
 
         let current_word = lesson_str[word];
@@ -63,6 +64,7 @@ function generateLesson(length_input) {
         let word_element = document.createElement("span");
         word_element.classList.add("word");
 
+        // Add individual letters into .word span as .letter span's
         for(let word_letter = 0; word_letter < lesson_str[word].length; word_letter++) {
             let letter_element = document.createElement("span");
             letter_element.classList.add("letter");
@@ -71,6 +73,7 @@ function generateLesson(length_input) {
         }
         lesson_element.appendChild(word_element);
 
+        // Add space after word, if this isn't the last word.
         if(word < lesson_str.length - 1) {
             let space_element = document.createElement("span");
             space_element.classList.add("space");
