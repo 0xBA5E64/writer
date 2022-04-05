@@ -79,16 +79,19 @@ function generateLesson(length_input) {
             lesson_element.appendChild(space_element);
         }
     }
-    
+
     document.getElementById("words").appendChild(caret_element);
     setCaretPos(0);
 }
 
 document.addEventListener("keydown", function(event) {
 
+
     if (event.key == letter_elements[caret_pos].innerHTML || (letter_elements[caret_pos].innerHTML == "_" && event.key == " ")) {
         if(caret_pos < letter_elements.length - 1) {
             caret_pos++; // Move to next letter succesfully
+        } else {
+            generateLesson(10)
         }
     } else if(event.key == "Backspace") {
         if(caret_pos > 0) { // Backspace 1 character
