@@ -15,6 +15,7 @@ let caret_element = document.createElement("div");
 caret_element.classList.add("caret");
 
 function setCaretPos(input) {
+    caret_pos = input;
 
     // Quick option
     //if(input >= 1) {    
@@ -84,28 +85,76 @@ function generateLesson(length_input) {
     }
 
     document.getElementById("words").appendChild(caret_element);
-    setCaretPos(0);
+    resetLesson()
 }
+
+function resetLesson() {
+    setCaretPos(0);
+    lesson_time_start = new Date();
+    for(let i = 0; i < letter_elements.length; i++) {
+        letter_elements[i].classList.remove("failed");
+    }
+    debugLog("Lesson Reset")
+}
+
+let debug_term_element = document.createElement("div");
+debug_term_element.style.position = "fixed";
+debug_term_element.style.top = "0px"
+debug_term_element.style.right = "0px"
+debug_term_element.style.width = "300px";
+debug_term_element.style.height = "100%";
+debug_term_element.style.background = "#222D";
+debug_term_element.style.color = "#FFF";
+debug_term_element.style.fontFamily = "Roboto Mono";
+debug_term_element.style.overflowY = "scroll";
+document.body.appendChild(debug_term_element)
+
+function debugLog(input) {
+    let entry_element = document.createElement("p");
+    entry_element.style.margin = "4px";
+    entry_element.style.background = "#111";
+    entry_element.style.padding = "2px";
+    entry_element.style.fontSize = "10px";
+
+    entry_element.innerHTML = input;
+    debug_term_element.appendChild(entry_element);
+    entry_element.scrollIntoView();
+    return entry_element;
+}
+
+debugLog("Debug Term initiated")
+
+let lesson_words = 10;
+let lesson_time_start = 0;
 
 document.addEventListener("keydown", function(event) {
 
+    if (caret_pos == 0) {
+        resetLesson();
+    }
 
     if (event.key == letter_elements[caret_pos].innerHTML || (letter_elements[caret_pos].innerHTML == "_" && event.key == " ")) {
         if(caret_pos < letter_elements.length - 1) {
             caret_pos++; // Move to next letter succesfully
         } else {
-            generateLesson(10)
+            let lesson_time_ms = Date.now() - lesson_time_start.getTime();
+            let lesson_time_wpm = Math.round( ( lesson_words / ( ( lesson_time_ms / 1000 ) / 60) ) * 100 ) / 100
+
+            debugLog("Lesson finished!<br>Length (ms): " + lesson_time_ms + "<br>WordsPerMin: " + lesson_time_wpm);
+            generateLesson(lesson_words)
         }
     } else if(event.key == "Backspace") {
-        if(caret_pos > 0) { // Backspace 1 character
-            caret_pos--;
+        if(caret_pos > 0) { 
+            caret_pos--; // Backspace 1 character
+        } else {
+            resetLesson(); // If backspace on beginning, reset.
         }
     } else if(event.key == "Escape") { // Reset on "Esc"
-        caret_pos = 0;
+        resetLesson();
     } else {
         letter_elements[caret_pos].classList.add("failed");
     }
     setCaretPos(caret_pos);
 })
 
-generateLesson(10);
+generateLesson(lesson_words);
