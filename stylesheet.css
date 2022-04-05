@@ -36,6 +36,11 @@ span {
     opacity: 0.5;
 }
 
+.letter.failed, .space.letter.failed::after {
+    color: #F44;
+    border-color: #F44 !important;
+}
+
 #words .space {
     position: relative;
     color: #0000;

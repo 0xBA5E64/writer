@@ -99,6 +99,8 @@ document.addEventListener("keydown", function(event) {
         }
     } else if(event.key == "Escape") { // Reset on "Esc"
         caret_pos = 0;
+    } else {
+        letter_elements[caret_pos].classList.add("failed");
     }
     setCaretPos(caret_pos);
 })
