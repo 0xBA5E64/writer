@@ -74,3 +74,42 @@ span {
     height: 90%;
     background: #222;
 }
+
+.debug-term {
+    position: fixed;
+    top:0;
+    right: calc(-400px + 8px);
+    width: 400px;
+    height: 100%;;
+
+    background: #222;
+    color: #DDD;
+    font-family: 'Roboto Mono', Courier, monospace;
+    font-size: 10px;
+    overflow-y: scroll;
+    transition: right .5s;
+}
+
+.debug-term:hover {
+    right: 0;
+}
+
+.debug-term .toggle {
+    position: sticky;
+    top:  16px;
+    left: 16px;
+    background: #DDD;
+    border: solid 1px #AAA;
+    border-radius: 8px;
+    width: 32px;
+    height: 32px;
+    margin: 16px;
+    cursor: pointer;
+}
+
+.debug-term .entry {
+    margin: 4px;
+    padding: 8px;
+    border-radius: 4px;
+    border: solid #444 1px;
+}
