@@ -98,7 +98,7 @@ function resetLesson() {
     lesson_current_log_entry = {
         log: [],
         duration: 0,
-        sentence: function() {
+        getSentence: function() {
             let out = "";
             for(let i = 0; i < this.log.length; i++) {
                 if(this.log[i].letter == "_") {
@@ -109,8 +109,8 @@ function resetLesson() {
             }
             return out;
         },
-        word_count: function () { return this.sentence().split(" ").length },
-        wpm: function() { return ( Math.round( ( this.word_count() / ( ( this.duration / 1000 ) / 60) ) * 100 ) / 100 ) }
+        getWordCount: function () { return this.sentence().split(" ").length },
+        getWpm: function() { return ( Math.round( ( this.getWordCount() / ( ( this.duration / 1000 ) / 60) ) * 100 ) / 100 ) }
     }
 }
 
@@ -166,7 +166,7 @@ document.addEventListener("keydown", function(event) {
         } else {
             lesson_current_log_entry.duration = Date.now() - lesson_time_start.getTime();
             lesson_log.push(lesson_current_log_entry);
-            debugLog("Lesson Finished!<br>WPM: " + lesson_log[lesson_log.length-1].wpm() + "<br>Sentence: <i>\"" + lesson_log[lesson_log.length-1].sentence() + "\"</i><br>Complete Log: " + JSON.stringify(lesson_log[lesson_log.length-1].log))
+            debugLog("Lesson Finished!<br>WPM: " + lesson_log[lesson_log.length-1].getWpm() + "<br>Sentence: <i>\"" + lesson_log[lesson_log.length-1].getSentence() + "\"</i><br>Complete Log: " + JSON.stringify(lesson_log[lesson_log.length-1].log))
             generateLesson(lesson_words)
         }
     } else if(event.key == "Backspace") {
