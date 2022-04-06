@@ -71,17 +71,17 @@ function generateLesson(length_input) {
             letter_element.classList.add("letter");
             letter_element.innerHTML = lesson_str[word][word_letter];
             word_element.appendChild(letter_element);
+
+            // Add space after word, if this isn't the last word.
+            if(word < lesson_str.length - 1 && word_letter == lesson_str[word].length - 1) {
+                let space_element = document.createElement("span");
+                space_element.classList.add("space");
+                space_element.classList.add("letter");
+                space_element.innerHTML = "_";
+                word_element.appendChild(space_element);
+            }
         }
         lesson_element.appendChild(word_element);
-
-        // Add space after word, if this isn't the last word.
-        if(word < lesson_str.length - 1) {
-            let space_element = document.createElement("span");
-            space_element.classList.add("space");
-            space_element.classList.add("letter");
-            space_element.innerHTML = "_";
-            lesson_element.appendChild(space_element);
-        }
     }
 
     document.getElementById("words").appendChild(caret_element);
