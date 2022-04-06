@@ -116,24 +116,12 @@ function resetLesson() {
 }
 
 let debug_term_element = document.createElement("div");
-debug_term_element.style.position = "fixed";
-debug_term_element.style.top = "0px"
-debug_term_element.style.right = "0px"
-debug_term_element.style.width = "300px";
-debug_term_element.style.height = "100%";
-debug_term_element.style.background = "#222D";
-debug_term_element.style.color = "#FFF";
-debug_term_element.style.fontFamily = "Roboto Mono";
-debug_term_element.style.overflowY = "scroll";
-document.body.appendChild(debug_term_element)
+debug_term_element.classList.add("debug-term");
+document.body.appendChild(debug_term_element);
 
 function debugLog(input) {
     let entry_element = document.createElement("p");
-    entry_element.style.margin = "4px";
-    entry_element.style.background = "#111";
-    entry_element.style.padding = "2px";
-    entry_element.style.fontSize = "10px";
-
+    entry_element.classList.add("entry");
     entry_element.innerHTML = input;
     debug_term_element.appendChild(entry_element);
     entry_element.scrollIntoView();
@@ -168,7 +156,7 @@ document.addEventListener("keydown", function(event) {
             lesson_current_log_entry.date = new Date();
             lesson_current_log_entry.duration = Date.now() - lesson_time_start.getTime();
             lesson_log.push(lesson_current_log_entry);
-            debugLog("Lesson Finished!<br>WPM: " + lesson_log[lesson_log.length-1].getWpm() + "<br>Sentence: <i>\"" + lesson_log[lesson_log.length-1].getSentence() + "\"</i><br>Complete Log: " + JSON.stringify(lesson_log[lesson_log.length-1]))
+            debugLog("Lesson Finished!<br>WPM: " + lesson_log[lesson_log.length-1].getWpm() + "<br>Sentence: <i>\"" + lesson_log[lesson_log.length-1].getSentence() + "\"</i><br>Complete Log: " + JSON.stringify(lesson_log[lesson_log.length-1], null, 1).replace(/(?:\r\n|\r|\n)/g, '<br>'));
             generateLesson(lesson_words)
         }
     } else if(event.key == "Backspace") {
