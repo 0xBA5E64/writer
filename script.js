@@ -96,6 +96,7 @@ function resetLesson() {
         letter_elements[i].classList.remove("failed");
     }
     lesson_current_log_entry = {
+        date: new Date(),
         log: [],
         duration: 0,
         getSentence: function() {
@@ -164,9 +165,10 @@ document.addEventListener("keydown", function(event) {
         if(caret_pos < letter_elements.length - 1) {
             caret_pos++; // Move to next letter succesfully
         } else {
+            lesson_current_log_entry.date = new Date();
             lesson_current_log_entry.duration = Date.now() - lesson_time_start.getTime();
             lesson_log.push(lesson_current_log_entry);
-            debugLog("Lesson Finished!<br>WPM: " + lesson_log[lesson_log.length-1].getWpm() + "<br>Sentence: <i>\"" + lesson_log[lesson_log.length-1].getSentence() + "\"</i><br>Complete Log: " + JSON.stringify(lesson_log[lesson_log.length-1].log))
+            debugLog("Lesson Finished!<br>WPM: " + lesson_log[lesson_log.length-1].getWpm() + "<br>Sentence: <i>\"" + lesson_log[lesson_log.length-1].getSentence() + "\"</i><br>Complete Log: " + JSON.stringify(lesson_log[lesson_log.length-1]))
             generateLesson(lesson_words)
         }
     } else if(event.key == "Backspace") {
