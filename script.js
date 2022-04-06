@@ -91,10 +91,27 @@ function generateLesson(length_input) {
 function resetLesson() {
     setCaretPos(0);
     lesson_time_start = new Date();
+    lesson_word_time = new Date();
     for(let i = 0; i < letter_elements.length; i++) {
         letter_elements[i].classList.remove("failed");
     }
-    debugLog("Lesson Reset")
+    lesson_current_log_entry = {
+        log: [],
+        duration: 0,
+        sentence: function() {
+            let out = "";
+            for(let i = 0; i < this.log.length; i++) {
+                if(this.log[i].letter == "_") {
+                    out += " "
+                } else {
+                    out += this.log[i].letter;
+                }
+            }
+            return out;
+        },
+        word_count: function () { return this.sentence().split(" ").length },
+        wpm: function() { return ( Math.round( ( this.word_count() / ( ( this.duration / 1000 ) / 60) ) * 100 ) / 100 ) }
+    }
 }
 
 let debug_term_element = document.createElement("div");
@@ -126,6 +143,7 @@ debugLog("Debug Term initiated")
 
 let lesson_words = 10;
 let lesson_time_start = 0;
+let lesson_log = [];
 
 document.addEventListener("keydown", function(event) {
 
@@ -134,13 +152,21 @@ document.addEventListener("keydown", function(event) {
     }
 
     if (event.key == letter_elements[caret_pos].innerHTML || (letter_elements[caret_pos].innerHTML == "_" && event.key == " ")) {
+        
+        lesson_current_log_entry.log.push({
+            letter: letter_elements[caret_pos].innerHTML,
+            time: (Date.now() - lesson_word_time),
+            failed: letter_elements[caret_pos].classList.contains("failed")
+        });
+
+        lesson_word_time = new Date();
+        
         if(caret_pos < letter_elements.length - 1) {
             caret_pos++; // Move to next letter succesfully
         } else {
-            let lesson_time_ms = Date.now() - lesson_time_start.getTime();
-            let lesson_time_wpm = Math.round( ( lesson_words / ( ( lesson_time_ms / 1000 ) / 60) ) * 100 ) / 100
-
-            debugLog("Lesson finished!<br>Length (ms): " + lesson_time_ms + "<br>WordsPerMin: " + lesson_time_wpm);
+            lesson_current_log_entry.duration = Date.now() - lesson_time_start.getTime();
+            lesson_log.push(lesson_current_log_entry);
+            debugLog("Lesson Finished!<br>WPM: " + lesson_log[lesson_log.length-1].wpm() + "<br>Sentence: <i>\"" + lesson_log[lesson_log.length-1].sentence() + "\"</i><br>Complete Log: " + JSON.stringify(lesson_log[lesson_log.length-1].log))
             generateLesson(lesson_words)
         }
     } else if(event.key == "Backspace") {
