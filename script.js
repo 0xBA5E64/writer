@@ -109,7 +109,7 @@ function resetLesson() {
             }
             return out;
         },
-        getWordCount: function () { return this.sentence().split(" ").length },
+        getWordCount: function () { return this.getSentence().split(" ").length },
         getWpm: function() { return ( Math.round( ( this.getWordCount() / ( ( this.duration / 1000 ) / 60) ) * 100 ) / 100 ) }
     }
 }
