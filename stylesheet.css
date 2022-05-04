@@ -41,20 +41,26 @@ span {
     border-color: #F44 !important;
 }
 
+.letter.incorrect {
+    background: #F44;
+    color: #DDD;
+    opacity: 1;
+}
+
 #words .space {
     position: relative;
     color: #0000;
-    margin: 0 2px;
+    padding: 0 2px;
 }
 
 #words .space::after {
     position: absolute;
-    left: 0;
+    left: .1em;
     bottom: .2em;
     
     content: "";
 
-    width: calc(100% - .2em);
+    width: calc(100% - .4em);
     height: 1px;
     
     border: solid .1em #AAA;

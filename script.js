@@ -92,8 +92,13 @@ function resetLesson() {
     setCaretPos(0);
     lesson_time_start = new Date();
     lesson_word_time = new Date();
-    for(let i = 0; i < letter_elements.length; i++) {
+    for(let i = letter_elements.length-1; i >= 0; i--) {
+        
         letter_elements[i].classList.remove("failed");
+
+        if(letter_elements[i].classList.contains("incorrect")) {
+            letter_elements[i].remove();
+        }
     }
     lesson_current_log_entry = {
         date: new Date(),
@@ -160,15 +165,32 @@ document.addEventListener("keydown", function(event) {
             generateLesson(lesson_words)
         }
     } else if(event.key == "Backspace") {
-        if(caret_pos > 0) { 
+        if(caret_pos > 0) {
             caret_pos--; // Backspace 1 character
+            if(letter_elements[caret_pos].classList.contains("incorrect")) {
+                letter_elements[caret_pos].remove();
+            }
+
         } else {
             resetLesson(); // If backspace on beginning, reset.
         }
     } else if(event.key == "Escape") { // Reset on "Esc"
         resetLesson();
-    } else {
+    } else if(event.key.length == 1 || event.key == " ") {
         letter_elements[caret_pos].classList.add("failed");
+
+        let wrong_char_element = document.createElement("span");
+        wrong_char_element.classList.add("letter");
+        wrong_char_element.classList.add("incorrect");
+        if (event.key == " ") {
+            wrong_char_element.innerHTML = "_";
+            wrong_char_element.classList.add("space");
+        } else {
+            wrong_char_element.innerHTML = event.key;
+        }
+        letter_elements[caret_pos].parentElement.insertBefore(wrong_char_element, letter_elements[caret_pos]);
+
+        caret_pos++;
     }
     setCaretPos(caret_pos);
 })
