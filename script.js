@@ -107,11 +107,7 @@ function resetLesson() {
         getSentence: function() {
             let out = "";
             for(let i = 0; i < this.log.length; i++) {
-                if(this.log[i].letter == "_") {
-                    out += " "
-                } else {
-                    out += this.log[i].letter;
-                }
+                out += this.log[i].letter;
             }
             return out;
         },
@@ -148,7 +144,7 @@ document.addEventListener("keydown", function(event) {
     if (event.key == letter_elements[caret_pos].innerHTML || (letter_elements[caret_pos].innerHTML == "_" && event.key == " ")) {
         
         lesson_current_log_entry.log.push({
-            letter: letter_elements[caret_pos].innerHTML,
+            letter: letter_elements[caret_pos].innerHTML.replace("_", " "),
             time: (Date.now() - lesson_word_time),
             failed: letter_elements[caret_pos].classList.contains("failed")
         });
@@ -182,12 +178,7 @@ document.addEventListener("keydown", function(event) {
         let wrong_char_element = document.createElement("span");
         wrong_char_element.classList.add("letter");
         wrong_char_element.classList.add("incorrect");
-        if (event.key == " ") {
-            wrong_char_element.innerHTML = "_";
-            wrong_char_element.classList.add("space");
-        } else {
-            wrong_char_element.innerHTML = event.key;
-        }
+        wrong_char_element.innerHTML = event.key.replace(" ", "_");
         letter_elements[caret_pos].parentElement.insertBefore(wrong_char_element, letter_elements[caret_pos]);
 
         caret_pos++;
