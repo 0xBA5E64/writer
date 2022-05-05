@@ -196,7 +196,8 @@ debugLog("Debug Term initiated")
 let writer = new writer_app(document.getElementById("words"));
 
 // Demo: Populate "word_bank" via sentence string
-let example_phrase = "The quick brown fox jumps over the lazy dog Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+let example_phrase = "The quick brown fox jumps over the lazy dog";
+// example_phrase += " Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
 writer.lesson.lesson_str.word_bank = writer.lesson.lesson_str.word_bank.concat(example_phrase.split(" "));
 
 writer.generate();
