@@ -144,7 +144,7 @@ class writer_app {
             
             if(this.app.carret.pos < this.app.letter_elements.length - 1) {
                 this.app.carret.pos++; // Move to next letter succesfully
-            } else {
+            } else if (this.app.letter_elements.length == this.app.lesson.lesson_str.value.join(" ").length) {
                 this.app.lesson.current_log_entry.date = new Date();
                 this.app.lesson.current_log_entry.duration = Date.now() - this.app.lesson.time_start.getTime();
                 this.app.lesson_log.push(this.app.lesson.current_log_entry);
