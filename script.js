@@ -128,48 +128,64 @@ class writer_app {
     }
 
     handle_keypress(event) {
+        // When the presses a key at the start of the curren, restart current lesson
+        // This is done as to not accumilate time on the first letter being pressed,-
+        // and so that back-spacing allows for an ergonomic reset. 
         if (this.app.carret.pos == 0) {
             this.app.restart();
         }
 
+        // If the user presses the *correct* current key...
         if (event.key == this.app.letter_elements[this.app.carret.pos].innerHTML || (this.app.letter_elements[this.app.carret.pos].innerHTML == "_" && event.key == " ")) {
             
+            // Add key-press to current lesson log list
             this.app.lesson.current_log_entry.log.push({
                 letter: this.app.letter_elements[this.app.carret.pos].innerHTML.replace("_", " "),
                 time: (Date.now() - this.app.lesson.letter_time),
                 failed: this.app.letter_elements[this.app.carret.pos].classList.contains("failed")
             });
-    
+            
+            // Reset key-timer for next key (used to calculate per-key speed)
             this.app.lesson.letter_time = new Date();
             
-            if(this.app.carret.pos < this.app.letter_elements.length - 1) {
-                this.app.carret.pos++; // Move to next letter succesfully
-            } else if (this.app.letter_elements.length == this.app.lesson.lesson_str.value.join(" ").length) {
+            // Check if the user has reached the end of the sentence, with no remaining errors
+            if (this.app.carret.pos == this.app.letter_elements.length - 1 && this.app.element.getElementsByClassName("incorrect").length == 0) {
                 this.app.lesson.current_log_entry.date = new Date();
                 this.app.lesson.current_log_entry.duration = Date.now() - this.app.lesson.time_start.getTime();
                 this.app.lesson_log.push(this.app.lesson.current_log_entry);
                 debugLog("Lesson Finished!<br>WPM: " + this.app.lesson_log[this.app.lesson_log.length-1].getWpm() + "<br>Sentence: <i>\"" + this.app.lesson_log[this.app.lesson_log.length-1].getSentence() + "\"</i><br>Complete Log: " + JSON.stringify(this.app.lesson_log[this.app.lesson_log.length-1], null, 1).replace(/(?:\r\n|\r|\n)/g, '<br>'));
                 this.app.generate()
+            } else if (this.app.carret.pos < this.app.letter_elements.length - 1) {
+                this.app.carret.pos++; // If we are before the end, move carret one step forward
             }
+        // If user presses backspace...
         } else if(event.key == "Backspace") {
+            // ...delete previous incorrect character (if applicable)-
+            // and move carret back one position.
             if(this.app.carret.pos > 0) {
-                this.app.carret.pos--; // Backspace 1 character
-                if(this.app.letter_elements[this.app.carret.pos].classList.contains("incorrect")) {
-                    this.app.letter_elements[this.app.carret.pos].remove();
+                if(this.app.letter_elements[this.app.carret.pos-1].classList.contains("incorrect")) {
+                    this.app.letter_elements[this.app.carret.pos-1].remove();
                 }
-    
+                this.app.carret.pos--;
+            // If user backspaces at beginning, restart.
             } else {
-                this.app.restart(); // If backspace on beginning, reset.
+                this.app.restart();
             }
-        } else if(event.key == "Escape") { // Reset on "Esc"
+        // If user presses escape...
+        } else if(event.key == "Escape") {
+            // ...restart lesson.
             this.app.restart();
+        // Finally, if input is any other normal input (a-Z, 0-9 or space)...
         } else if(event.key.length == 1 || event.key == " ") {
+            // Register incorrect keypress
             this.app.letter_elements[this.app.carret.pos].classList.add("failed");
-    
+            
+            // Create incorrect letter element...
             let wrong_char_element = document.createElement("span");
             wrong_char_element.classList.add("letter");
             wrong_char_element.classList.add("incorrect");
             wrong_char_element.innerHTML = event.key.replace(" ", "_");
+            // ...and append to current position
             this.app.letter_elements[this.app.carret.pos].parentElement.insertBefore(wrong_char_element, this.app.letter_elements[this.app.carret.pos]);
     
             this.app.carret.pos++;
