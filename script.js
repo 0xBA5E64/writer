@@ -1,3 +1,16 @@
+class log_entry {
+    constructor() {
+        this.date = new Date();
+        this.log = [];
+        this.duration = 0;
+    }
+    getSentence()       { return this.log.map((entry)=>{ return entry.letter }).reduce((out, entry)=> {return out + entry }) }
+    getWordCount()      { return this.getSentence().split(" ").length };
+    getWpm()            { return ( Math.round( ( this.getWordCount() / ( ( this.duration / 1000 ) / 60) ) * 100 ) / 100 ) };
+    getMedianKeySpeed() { return this.log.map((entry) => { return entry.time }).sort((a,b)=>{return a-b})[Math.round(this.log.length/2)-1] };
+    getAccuracy()       { return Math.floor(this.log.map((entry) => { if(entry.failed) {return 0} else {return 1} }).reduce((a,b)=>{return a+b})/this.log.length*100) };
+}
+
 class writer_app {
     constructor(lesson_element_input) {
         this.lesson_log = [];
@@ -111,20 +124,7 @@ class writer_app {
                 this.letter_elements[i].remove();
             }
         }
-        this.lesson.current_log_entry = {
-            date: new Date(),
-            log: [],
-            duration: 0,
-            getSentence: function() {
-                let out = "";
-                for(let i = 0; i < this.log.length; i++) {
-                    out += this.log[i].letter;
-                }
-                return out;
-            },
-            getWordCount: function () { return this.getSentence().split(" ").length },
-            getWpm: function() { return ( Math.round( ( this.getWordCount() / ( ( this.duration / 1000 ) / 60) ) * 100 ) / 100 ) }
-        }
+        this.lesson.current_log_entry = new log_entry();
     }
 
     handle_keypress(event) {
